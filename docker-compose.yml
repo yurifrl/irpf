@@ -1,0 +1,10 @@
+version: '3'
+services:
+  irpf:
+    image: yurifl/irpf
+    build: .
+    environment:
+      - DISPLAY=$DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - $HOME/irpf:/root
