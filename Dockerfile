@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ARG YEAR=2019
 ARG VERSION=1.5
 
-RUN wget "http://downloadirpf.receita.fazenda.gov.br/irpf/$YEAR/irpf/arquivos/IRPF$YEAR-$VERSION.zip $FILE" -O irpf.zip && \
+RUN wget -L "http://downloadirpf.receita.fazenda.gov.br/irpf/$YEAR/irpf/arquivos/IRPF$YEAR-$VERSION.zip" -O irpf.zip && \
     unzip irpf.zip -d /opt/ && \
     mv /opt/IRPF*/ /opt/irpf
 

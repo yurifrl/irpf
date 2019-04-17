@@ -1,5 +1,5 @@
 YEAR=2019
-YEAR=1.5
+VERSION=1.5
 IMAGE=yurifl/irpf
 
 default:
