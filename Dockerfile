@@ -1,19 +1,20 @@
-FROM openjdk:9
+FROM alpine AS irpf
+RUN apk add --no-cache wget
+ENV YEAR 2020
+ENV VERSION 1.4
+ENV URL "http://downloadirpf.receita.fazenda.gov.br/irpf/${YEAR}/irpf/arquivos/IRPF${YEAR}-${VERSION}.zip"
+RUN echo $URL
+RUN wget -L $URL -O irpf.zip && \
+    unzip irpf.zip -d / && \
+    rm irpf.zip && \
+    mv "IRPF${YEAR}" /opt/irpf
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgtk2.0-0 libcanberra-gtk-module libxext-dev libxrender-dev libxtst-dev && \
-    rm -rf /var/lib/apt/lists/*
+FROM openjdk:8-alpine
+RUN apk add --no-cache ttf-dejavu
+RUN adduser -D -u 1000 irpf
+WORKDIR /home/irpf
 
-ARG YEAR=2019
-ARG VERSION=1.5
-
-RUN wget -L "http://downloadirpf.receita.fazenda.gov.br/irpf/$YEAR/irpf/arquivos/IRPF$YEAR-$VERSION.zip" -O irpf.zip && \
-    unzip irpf.zip -d /opt/ && \
-    mv /opt/IRPF*/ /opt/irpf
-
-RUN groupadd --gid 1000 irpf && \
-    useradd --gid 1000 --uid 1000 --create-home --shell /bin/bash irpf
+COPY --from=irpf --chown=irpf:irpf /opt/irpf /opt/irpf
 
 USER irpf
-
-CMD ["java", "-Xms128M", "-Xmx512M", "-jar", "/opt/irpf/irpf.jar"]
+CMD ["java", "-jar", "/opt/irpf/irpf.jar"]
