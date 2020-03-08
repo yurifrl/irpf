@@ -1,0 +1,16 @@
+name: Publish Docker
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: textbook/git-checkout-submodule-action@master
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: yurifl/irpf
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          buildargs: YEAR=2019,VERSION=1.5
+          tag_names: true
