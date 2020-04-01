@@ -1,7 +1,7 @@
 FROM alpine AS irpf
 RUN apk add --no-cache wget
 ENV YEAR 2020
-ENV VERSION 1.4
+ENV VERSION 1.5
 ENV URL "http://downloadirpf.receita.fazenda.gov.br/irpf/${YEAR}/irpf/arquivos/IRPF${YEAR}-${VERSION}.zip"
 RUN echo $URL
 RUN wget -L $URL -O irpf.zip && \
